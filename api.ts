@@ -8,8 +8,8 @@ export async function translate(key: string, text: string, otherTranslations: { 
   
   console.log({
     text,
-    otherTranslations: otherTranslations.map(t => t.from),
-    otherKeywords: otherKeywords.map(t => t.from)
+    relatedTranslations: otherTranslations.map(t => t.from),
+    relatedKeywords: otherKeywords.map(t => t.from)
   });
   
   const response = await openAi.chat.completions.create({
@@ -62,6 +62,12 @@ export async function translate(key: string, text: string, otherTranslations: { 
       }
     }
   });
+
+  const result = JSON.parse(response.choices[0].message.content as string) as any;
+
+  console.log({
+    result: result.translation,
+  })
   
-  return JSON.parse(response.choices[0].message.content as string) as any ;
+  return result;
 }
