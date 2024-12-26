@@ -2,7 +2,8 @@
 	"dependencies": {
 		"chromadb": "^1.9.4",
 		"dotenv": "^16.4.7",
-		"openai": "^4.77.0"
+		"openai": "^4.77.0",
+		"yaml": "^2.6.1"
 	},
 	"scripts": {
 		"start": "tsx index.ts"
