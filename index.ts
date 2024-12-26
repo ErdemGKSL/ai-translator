@@ -56,6 +56,20 @@ async function translateString(input: string, key: string) {
 
   if (translated.keywords?.length > 0) {
     for (const value of translated.keywords) {
+      if (
+        (
+          value.from.startsWith("%") && value.from.endsWith("%")
+        ) || (
+          value.from.startsWith("{") && value.from.endsWith("}")
+        ) || (
+          value.from.startsWith("$") && value.from.endsWith("$")
+        ) || (
+          value.from.startsWith("&") && value.from.length === 2
+        )
+      ) {
+        console.log("Skipped", value.from, value.to);
+        continue;
+      }
       await addKeyword(value);
     }
   }

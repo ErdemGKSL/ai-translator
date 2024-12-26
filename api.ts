@@ -11,6 +11,15 @@ export async function translate(key: string, text: string, otherTranslations: { 
     relatedTranslations: otherTranslations.map(t => t.from),
     relatedKeywords: otherKeywords.map(t => t.from)
   });
+
+  const variables = text.match(/%[^%]+%|{[^}]+}/g) || [];
+
+  for (const variable of variables) {
+    otherKeywords.push({
+      from: variable,
+      to: variable
+    });
+  }
   
   const response = await openAi.chat.completions.create({
     model: "gpt-4o-mini",
