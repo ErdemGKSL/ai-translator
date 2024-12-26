@@ -20,8 +20,8 @@ async function translateRecursive(input: any, key?: string, recursiveKeys: strin
     return await translateString(input, key!);
   } else if (Array.isArray(input)) {
     if (input.every(e => typeof e === "string")) {
-      const fullText = input.join("\n");
-      return (await translateString(fullText, key!)).split("\n");
+      const fullText = input.join("\\n");
+      return (await translateString(fullText, key!)).split(/\n|\\n/);
     }
     return input;
   } else if (typeof input === "object") {
