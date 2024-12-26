@@ -76,7 +76,7 @@ export async function find(prompt: string, size: number = 5): Promise<{ translat
 
   const keywords = await keywordsCollection.query({
     queryEmbeddings: chatGptResponse.data.map(r => r.embedding),
-    nResults: size * 4
+    nResults: size * 2
   }).then((r) => r.metadatas[0]).then(r => r.filter(e => e) as any);
 
   return {

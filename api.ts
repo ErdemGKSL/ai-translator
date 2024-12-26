@@ -17,11 +17,15 @@ export async function translate(key: string, text: string, otherTranslations: { 
     messages: [
       {
         role: "system",
-        content: `You are a translator from ${process.env.SOURCE_LANGUAGE || "English"} to ${process.env.TARGET_LANGUAGE || "German"}. You will have other translations to keep in mind to use the same keywords for your translation.`
+        content: `You are a translator from ${process.env.SOURCE_LANGUAGE || "English"} to ${process.env.TARGET_LANGUAGE || "German"}. Extract keywords from the text that user provides. You will have other translations to keep in mind to use the same keywords for your translation.`
         + "\n" + `Other translations: ${otherTranslations.map(t => `"${t.from}" -> "${t.to}"`).join(", ")}`
         + "\n" + `Other keywords: ${otherKeywords.map(t => `"${t.from}" -> "${t.to}"`).join(", ")}`
-        + "\n" + process.env.PREPROMPT || "Translate the following users requested text."
-        + "\n" + `TextId: "${key}", Text to translate: "${text}"`
+        + "\n" + process.env.PREPROMPT
+        + "\n" + `TextId: "${key}", Translate the following users requested text.`
+      },
+      {
+        role: "user",
+        content: text
       }
     ],
     response_format: {
