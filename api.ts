@@ -4,8 +4,13 @@ export const openAi = new OpenAI({
   apiKey: process.env.OPENAI_KEY!
 });
 
-export async function translate(key: string,text: string, otherTranslations: { from: string, to: string }[], otherKeywords: { from: string, to: string }[]): Promise<{ translation: string; keywords: { from: string; to: string; }[]; }> {
-  console.log(otherTranslations, otherKeywords);
+export async function translate(key: string, text: string, otherTranslations: { from: string, to: string }[], otherKeywords: { from: string, to: string }[]): Promise<{ translation: string; keywords: { from: string; to: string; }[]; }> {
+  
+  console.log({
+    text,
+    otherTranslations: otherTranslations.map(t => t.from),
+    otherKeywords: otherKeywords.map(t => t.from)
+  });
   
   const response = await openAi.chat.completions.create({
     model: "gpt-4o-mini",

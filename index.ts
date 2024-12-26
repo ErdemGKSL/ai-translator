@@ -53,9 +53,11 @@ async function translateRecursive(input: any, key?: string, recursiveKeys: strin
 async function translateString(input: string, key: string) {
   const { translations, keywords } = await find(input);
   const translated = await translate(key, input, translations, keywords);
-  console.log(translated);
-  for (const value of translated.keywords) {
-    await addKeyword(value);
+
+  if (translated.keywords?.length > 0) {
+    for (const value of translated.keywords) {
+      await addKeyword(value);
+    }
   }
 
   await addTranslation({
