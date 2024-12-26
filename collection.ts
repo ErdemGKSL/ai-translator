@@ -89,12 +89,12 @@ export async function find(prompt: string, size: number = 5): Promise<{ translat
 
 export async function resetCollection() {
   await chroma.deleteCollection({
-    name: (process.env.DB_NAME || "translation") + "_translations"
-  }).catch(() => {});
+    name: BASE_DB_NAME + "_translations"
+  }).catch(console.log);
 
   await chroma.deleteCollection({
-    name: (process.env.DB_NAME || "translation") + "_keywords"
-  }).catch(() => {});
+    name: BASE_DB_NAME + "_keywords"
+  }).catch(console.log);
 
   return await getCollection();
 }
