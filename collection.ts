@@ -79,8 +79,6 @@ export async function find(prompt: string, size: number = 5): Promise<{ translat
     nResults: size * 4
   }).then((r) => r.metadatas[0]).then(r => r.filter(e => e) as any);
 
-
-
   return {
     translations,
     keywords
