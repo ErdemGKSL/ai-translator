@@ -72,11 +72,16 @@ export async function translate(key: string, text: string, otherTranslations: { 
     }
   });
 
-  const result = JSON.parse(response.choices[0].message.content as string) as any;
+  try {
+    const result = JSON.parse(response.choices[0].message.content as string) as any;
 
-  console.log({
-    result: result.translation,
-  })
-  
-  return result;
+    console.log({
+      result: result.translation,
+    })
+    
+    return result;
+  } catch {
+    await new Promise(resolve => setTimeout(resolve, 1000 * 60));
+    return await translate(key, text, otherTranslations, otherKeywords);
+  }
 }
