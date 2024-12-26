@@ -13,22 +13,10 @@ export async function translate(key: string,text: string, otherTranslations: { f
       {
         role: "system",
         content: `You are a translator from ${process.env.SOURCE_LANGUAGE || "English"} to ${process.env.TARGET_LANGUAGE || "German"}. You will have other translations to keep in mind to use the same keywords for your translation.`
-      },
-      {
-        role: "system",
-        content: `Other translations: ${otherTranslations.map(t => `${t.from} -> ${t.to}`).join(", ")}`
-      },
-      {
-        role: "system",
-        content: `Other keywords: ${otherKeywords.map(t => `${t.from} -> ${t.to}`).join(", ")}`
-      },
-      {
-        role: "system",
-        content: process.env.PREPROMPT || "Translate the following users requested text."
-      },
-      {
-        role: "user",
-        content: `TextId: "${key}", Text to translate: "${text}"`
+        + "\n" + `Other translations: ${otherTranslations.map(t => `"${t.from}" -> "${t.to}"`).join(", ")}`
+        + "\n" + `Other keywords: ${otherKeywords.map(t => `"${t.from}" -> "${t.to}"`).join(", ")}`
+        + "\n" + process.env.PREPROMPT || "Translate the following users requested text."
+        + "\n" + `TextId: "${key}", Text to translate: "${text}"`
       }
     ],
     response_format: {
