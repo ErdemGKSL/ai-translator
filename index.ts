@@ -50,14 +50,13 @@ async function translateRecursive(input: any, key?: string, recursiveKeys: strin
 
       if (typeof value === "string" || (Array.isArray(value) && value.every(e => typeof e === "string"))) {
         // set output's target key based on recursive keys
-        output = recursiveKeys.reduce((acc, key, index) => {
-          if (index === 0) {
+        recursiveKeys.reduce((acc, key, index) => {
+          if (index === recursiveKeys.length - 1) {
             acc[key] = cOutput;
           } else {
             acc[key] = acc[key] || {};
-            acc[key] = acc[key];
           }
-          return acc;
+          return acc[key];
         }, output);
 
         await fs.promises.writeFile("./output.json", JSON.stringify(output, null, 2));
