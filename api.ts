@@ -75,6 +75,16 @@ export async function translate(key: string, text: string, otherTranslations: { 
   try {
     const result = JSON.parse(response.choices[0].message.content as string) as any;
 
+    if (typeof result.translation === "object") {
+      if (Array.isArray(result.translation)) {
+        result.translation = result.translation[0];
+      } else {
+        result.translation = Object.values(result.translation).find((t) => typeof t === "string")
+      }
+    }
+
+    if (typeof result.translation !== "string" || result.translation == "undefined") throw Error("Zortingenstrasse")
+
     console.log({
       result: result.translation,
     })
