@@ -6,7 +6,8 @@
 		"yaml": "^2.6.1"
 	},
 	"scripts": {
-		"start": "tsx index.ts"
+		"start": "tsx index.ts",
+		"start:chromadb": "sudo docker run -d --rm --name chromadb -p 8000:8000 -v ./chroma:/chroma/chroma -e IS_PERSISTENT=TRUE -e ANONYMIZED_TELEMETRY=TRUE chromadb/chroma:0.5.20"
 	},
 	"devDependencies": {
 		"@types/node": "^22.10.2",
