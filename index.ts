@@ -14,7 +14,7 @@ async function main() {
     await fs.promises.writeFile("./input.json", JSON.stringify(input, null, 2));
   }
 
-  // await resetCollection();
+  await resetCollection();
 
   if (fs.existsSync("./prekeywords.json")) {
     const prekeywords = JSON.parse(await fs.promises.readFile("./prekeywords.json", "utf-8"));

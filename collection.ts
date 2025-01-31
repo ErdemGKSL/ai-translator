@@ -25,10 +25,12 @@ export async function addTranslation(translation: {
 }) {
   const prompt = `Translate from "${translation.from}" to "${translation.to}"`
 
-  const chatGptResponse = await openAi.embeddings.create({
-    input: prompt,
-    model: "text-embedding-3-large",
-  });
+  const chatGptResponse = 
+    await tryEmbeddings(prompt) ||
+    await openAi.embeddings.create({
+      input: prompt,
+      model: "text-embedding-3-large",
+    });
 
   const [translationCollections, keywordsCollection] = await getCollection();
 
@@ -46,10 +48,12 @@ export async function addKeyword(keyword: {
 }) {
   const prompt = `Translate from "${keyword.from}" to "${keyword.to}"`
 
-  const chatGptResponse = await openAi.embeddings.create({
-    input: prompt,
-    model: "text-embedding-3-large",
-  });
+  const chatGptResponse = 
+    await tryEmbeddings(prompt) ||
+    await openAi.embeddings.create({
+      input: prompt,
+      model: "text-embedding-3-large",
+    });
 
   const [translationCollections, keywordsCollection] = await getCollection();
 
@@ -62,10 +66,12 @@ export async function addKeyword(keyword: {
 }
 
 export async function find(prompt: string, size: number = 5): Promise<{ translations: { from: string; to: string; }[]; keywords: { from: string; to: string; }[]; }> {
-  const chatGptResponse = await openAi.embeddings.create({
-    input: prompt,
-    model: "text-embedding-3-large",
-  });
+  const chatGptResponse =
+    await tryEmbeddings(prompt) ||
+    await openAi.embeddings.create({
+      input: prompt,
+      model: "text-embedding-3-large",
+    });
 
   const [translationCollections, keywordsCollection] = await getCollection();
 
@@ -95,4 +101,20 @@ export async function resetCollection() {
   }).catch(console.log);
 
   return await getCollection();
+}
+
+export async function tryEmbeddings(content: string, tried = 0) {
+  try {
+    return await openAi.embeddings.create({
+      input: content,
+      model: "text-embedding-3-large",
+    });
+  } catch (e) {
+    if (tried < 3) {
+      await new Promise(r => setTimeout(r, 3000 * tried));
+      return await tryEmbeddings(content, tried + 1);
+    } else {
+      throw e;
+    }
+  }
 }
