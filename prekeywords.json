@@ -1,0 +1,26 @@
+[
+  {
+    "from": "alchemy",
+    "to": "simya"
+  },
+  {
+    "from": "drill",
+    "to": "matkap"
+  },
+  {
+    "from": "resets to 0",
+    "to": "sıfırlar"
+  },
+  {
+    "from": "berserker",
+    "to": "çılgın"
+  },
+  {
+    "from": "brute",
+    "to": "kaba"
+  },
+  {
+    "from": "brute force",
+    "to": "kaba kuvvet"
+  }
+]

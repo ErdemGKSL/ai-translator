@@ -20,6 +20,18 @@ export async function translate(key: string, text: string, otherTranslations: { 
       to: variable
     });
   }
+
+  const colorCodes = [
+    "&0", "&1", "&2", "&3", "&4", "&5", "&6", "&7", "&8", "&9", "&a", "&b", "&c", "&d", "&e", "&f",
+    "&k", "&l", "&m", "&n", "&o", "&r"
+  ];
+
+  for (const colorCode of colorCodes) {
+    otherKeywords.push({
+      from: colorCode,
+      to: colorCode
+    });
+  }
   
   const response = await openAi.chat.completions.create({
     model: "gpt-4o-mini",

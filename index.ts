@@ -13,9 +13,18 @@ async function main() {
     const input = yaml.parse(await fs.promises.readFile("./input.yaml", "utf-8"));
     await fs.promises.writeFile("./input.json", JSON.stringify(input, null, 2));
   }
-  const input = JSON.parse(await fs.promises.readFile("./input.json", "utf-8"));
 
-  await resetCollection();
+  // await resetCollection();
+
+  if (fs.existsSync("./prekeywords.json")) {
+    const prekeywords = JSON.parse(await fs.promises.readFile("./prekeywords.json", "utf-8"));
+
+    for (let value of prekeywords) {
+      await addKeyword(value);
+    }
+  }
+
+  const input = JSON.parse(await fs.promises.readFile("./input.json", "utf-8"));
 
   output = await translateRecursive(input, undefined, []);
 
@@ -73,7 +82,16 @@ async function translateString(input: string, key: string) {
   const translated = await translate(key, input, translations, keywords);
 
   if (translated.keywords?.length > 0) {
-    for (const value of translated.keywords) {
+    for (let value of translated.keywords) {
+      let raw = { ...value };
+      if (typeof value.from != "string") continue;
+
+
+      if (value.from.startsWith("&") && value.from.length >= 2) {
+        value.from = value.from.slice(2);
+        value.to = value.to.slice(2);
+      }
+
       if (
         (
           value.from.startsWith("%") && value.from.endsWith("%")
@@ -83,14 +101,18 @@ async function translateString(input: string, key: string) {
           value.from.startsWith("$") && value.from.endsWith("$")
         ) || (
           value.from.startsWith("&") && value.from.length === 2
-        )
+        ) ||
+        !value.from.trim().length
       ) {
-        console.log("Skipped", value.from, value.to);
+        console.log("Skipped", [raw.from, raw.to]);
         continue;
       }
+
       await addKeyword(value);
     }
   }
+
+  
 
   await addTranslation({
     from: input,
